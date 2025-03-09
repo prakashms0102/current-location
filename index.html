@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Live Location</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #output {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Get Your Live Location</h2>
+    <button onclick="getLocation()">Get My Location</button>
+
+    <div id="output"></div>
+
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError, {
+                    enableHighAccuracy: true, // Enable high-accuracy mode
+                    timeout: 10000, // Wait up to 10 seconds
+                    maximumAge: 0 // Do not use cached data
+                });
+            } else {
+                document.getElementById("output").innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+
+        function showPosition(position) {
+            let latitude = position.coords.latitude;
+            let longitude = position.coords.longitude;
+
+            document.getElementById("output").innerHTML = 
+                `<b>Latitude:</b> ${latitude} <br> 
+                 <b>Longitude:</b> ${longitude} <br>
+                 <a href="https://www.google.com/maps?q=${latitude},${longitude}" target="_blank">View on Google Maps</a>`;
+        }
+
+        function showError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    document.getElementById("output").innerHTML = "User denied the request for Geolocation.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    document.getElementById("output").innerHTML = "Location information is unavailable.";
+                    break;
+                case error.TIMEOUT:
+                    document.getElementById("output").innerHTML = "The request to get user location timed out.";
+                    break;
+                case error.UNKNOWN_ERROR:
+                    document.getElementById("output").innerHTML = "An unknown error occurred.";
+                    break;
+            }
+        }
+    </script>
+
+</body>
+</html>
